@@ -18,7 +18,7 @@ define(["jquery", "text!./style.css","./senseD3utils"], function($, cssContent) 
 Once the library is loaded, the functions can be called against the senseUtils namespace:
 ```
 senseUtils; // the library namespace
-senseUtils.destroyCube(app,qId); // removes a hypercube
+senseUtils.destroyObj(app,qId); // removes a transient object like a mashup-defined hypercube
 ```
 
 Function Overview
