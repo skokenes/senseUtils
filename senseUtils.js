@@ -1,5 +1,5 @@
 var senseUtils = {
-	destroyCube: function(app,qId) {
+	destroyObj: function(app,qId) {
 		app.model.session.socket.send(JSON.stringify({
 			"jsonrpc": "2.0",
 			"id": 2,
@@ -53,7 +53,7 @@ var senseUtils = {
 
 		multiCube.removeCube = function(_) {
 			if(!arguments.length) return null;
-			senseUtils.destroyCube(app,getCubeObj(_).qId);
+			senseUtils.destroyObj(app,getCubeObj(_).qId);
 			cubes = cubes.filter(function(d) {return d.id !=_});
 		}
 
@@ -69,7 +69,7 @@ var senseUtils = {
 
 		multiCube.selfDestruct = function() {
 			cubes.forEach(function(d) {
-				senseUtils.destroyCube(app,d.qId);
+				senseUtils.destroyObj(app,d.qId);
 			});
 			app = null,
 		 	cubes = [], 
