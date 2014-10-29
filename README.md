@@ -25,7 +25,7 @@ Function Overview
 --
 **destroyObj**(_app,qId_)
 
-destroyCube takes in a reference to an application opened with the Qlik Sense Workbench API and the qId of a transient object and removes it. This function is useful in mashups when a hypercube is no longer needed and can be removed. _qId_ can also be an array of qId's as strings; in this case, it will remove all the objects in the array from the server.
+destroyObj takes in a reference to an application opened with the Qlik Sense Workbench API and the qId of a transient object and removes it. This function is useful in mashups when a hypercube is no longer needed and can be removed. _qId_ can also be an array of qId's as strings; in this case, it will remove all the objects in the array from the server.
 
 **multiCube**()
 
