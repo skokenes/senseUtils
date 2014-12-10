@@ -46,11 +46,11 @@ body {
 }
 
 .filter-item {
-	padding:10px;
-	padding-left:25px;
+	padding:10px 25px;
 	color:#373A47;
 	font-size:14px;
-	border-bottom:1px solid #DDDDDD; //#F9F5D6
+	border-bottom:1px solid #DDDDDD;
+	position:relative;
 }
 
 .filter-item.selected {
@@ -86,7 +86,9 @@ body {
 
 .check {
 	float:right;
-	padding-top:5px;
+	position:absolute;
+	top:43%;
+	right:10px;
 }
 
 .check path {
