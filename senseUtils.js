@@ -105,5 +105,250 @@ var senseUtils = {
 
 		return multiCube;
 
+	},
+
+	filterPanel: function() {
+		var fields=[],
+			field_list = [],
+			app,
+			badges = true,
+			autoCollapse = true,
+			container,
+			init = false,
+			chevron = '<svg height="6px" version="1.1" viewBox="0 0 12 7.4000001" width="9px"><g id="Page-1" transform="matrix(0,1,-1,0,12,-0.1)" style="fill:none;stroke:none"><g id="Core" transform="translate(-260,-90)" style="fill:#000000"><g id="chevron-right" transform="translate(260.5,90)"><path d="M 1,0 -0.4,1.4 4.2,6 -0.4,10.6 1,12 7,6 1,0 z" id="Shape" inkscape:connector-curvature="0"></path></g></g></g></svg>',
+			check = '<svg height="9px" version="1.1" viewBox="0 0 18 15" width="12px" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0 0 12 9"><title></title><desc></desc><defs></defs><g fill="none" fill-rule="evenodd" id="Page-1" stroke="none" stroke-width="1"><g fill="#000000" id="Core" transform="translate(-423.000000, -47.000000)"><g id="check" transform="translate(423.000000, 47.500000)"><path d="M6,10.2 L1.8,6 L0.4,7.4 L6,13 L18,1 L16.6,-0.4 L6,10.2 Z" id="Shape"></path></g></g></g></svg>';
+
+		function filterPanel() {
+
+		}
+
+		filterPanel.fields = function() {
+			return fields;
+		}
+
+		filterPanel.addFields = function(_) {
+			
+			_.forEach(function(d) {
+				if (d.hasOwnProperty("title") && field_list.indexOf(d.name)===-1) {
+					fields.push(new field(d.name,d.title))
+					field_list.push(d.name);
+				}
+				else if (field_list.indexOf(d)===-1) {
+					fields.push(new field(d));
+					field_list.push(d);
+				}
+			});
+
+			build();
+
+			return filterPanel;
+		}
+
+		filterPanel.app = function(_) {
+			if (!arguments.length) return app;
+	    	app = _;
+	    	return filterPanel;
+		}
+
+		filterPanel.badges = function(_) {
+			if (!arguments.length) return badges;
+	    	badges = _;
+	    	$(".filter-badge").each(function(i,d) {checkBadge(d);});
+	    	return filterPanel;
+		}
+
+		filterPanel.autoCollapse = function(_) {
+			if (!arguments.length) return autoCollapse;
+	    	autoCollapse = _;
+	    	return filterPanel;
+		}
+
+		filterPanel.container = function(_) {
+			if (!arguments.length) return container;
+	    	container = _;
+	    	return filterPanel;
+		}
+
+		filterPanel.removeField = function(_) {
+			if(!arguments.length) return filterPanel;
+			var field = fields.filter(function(d) {return d.field === _})[0];
+			console.log(field);
+			senseUtils.destroyObj(app,field.qId);
+			fields = fields.filter(function(d) {return d.field !=_});
+			field_list = field_list.filter(function(d) {return d !=_});
+			$(".filter").filter(function(d) {return $(this).data().field===_}).empty();
+		}
+
+
+		function field(name,title) {
+			this.field = name;
+			this.title = typeof title === "undefined" ? name : title;
+			this.init = false;
+			this.values = null;
+			this.cardinality = null;
+			this.selected = null;
+			this.possible = null;
+			this.qId = null;
+		}
+
+		function build() {
+			var filter_build = fields.filter(function(d) {return d.init === false;});
+			
+			filter_build.forEach(function(d) {
+				d.init = true;
+
+				// build the filter
+				var filter = document.createElement("div");
+				$(filter)
+					.addClass("filter")
+					.data("field",d.field)
+					.appendTo($(container));
+
+				// create the list box header
+				var header = document.createElement("div");
+				// set it's properties
+				$(header)
+					.addClass("filter-header")
+					.addClass("inactive")
+					.html(d.title)
+					.appendTo($(filter));
+
+				// create the chevron
+				var chev = document.createElement("div");
+				$(chev)
+					.addClass("chevron")
+					.html(chevron)
+					.appendTo($(header));
+
+				
+				// create the badge
+				var badge = document.createElement("span");
+				$(badge)
+					.addClass("badge")
+					.addClass("filter-badge")
+					.appendTo($(header));
+
+				// create filter content
+				var content = document.createElement("div");
+				$(content)
+					.addClass("filter-content")
+					.addClass("inactive")
+					.appendTo($(filter));
+
+				// click event to toggle show
+				$(header)
+					.on("click",function() {
+						if($(content).hasClass("active")) {
+							$(content).removeClass("active");
+							$(content).addClass("inactive");
+
+						}
+						else {
+
+							if(autoCollapse===true) $(container).find(".active")
+								.removeClass("active")
+								.addClass("inactive");
+
+							$(content)
+								.removeClass("inactive")
+								.addClass("active");
+						}
+					});
+
+				// create hypercube
+				var field = d.field;
+				app.createList({
+					"qDef": {
+						"qFieldDefs": [
+							field
+						]
+					},
+					"qInitialDataFetch": [{
+							qTop : 0,
+							qLeft : 0,
+							qHeight : 10000,
+							qWidth : 1
+						}]
+					}, function(reply) {
+						var values = reply.qListObject.qDataPages[0].qMatrix.map(function(e) {
+							return e[0];
+						});
+						d.values = values;
+						d.cardinality = reply.qListObject.qDimensionInfo.qCardinal;
+						d.selected = reply.qListObject.qDimensionInfo.qStateCounts.qSelected;
+						d.possible = reply.qListObject.qDimensionInfo.qStateCounts.qOption;
+						d.qId = reply.qInfo.qId;
+						update(d);
+					});	
+
+			});
+			
+		}
+
+		function update(cf) {
+
+			// the classes
+			var classes = {
+		                "S":"selected",
+		                "O": "possible",
+		                "X": "excluded"
+		    };
+
+		    var filter = $(container).find(".filter").filter(function(d) {return $(this).data().field===cf.field});
+	    	// current field
+	    	var field = cf.field;
+
+	    	// get badge
+	    	var badge = $(".filter-badge",$(filter));
+	    	var badge_data = cf.selected;
+	    	$(badge)
+				.html(badge_data)
+				.data({"count":badge_data});
+			checkBadge(badge);
+
+	    	// get content
+	    	var content = $(".filter-content",$(filter));
+
+	    	// get new content data
+	    	var content_data = cf.values;
+
+	    	// empty content
+	    	$(content).empty();
+
+	    	// rebuild content
+			content_data.forEach(function(e,k) {
+
+				var list_item = document.createElement("div");
+				
+				// create the check
+				var check_d = document.createElement("div");
+				$(check_d)
+					.addClass("check")
+					.html(check)
+					.appendTo($(list_item));
+
+				$(list_item)
+					.addClass("filter-item")
+					.addClass(classes[e.qState])
+					.append(e.qText)
+					.appendTo($(content))
+					.click(function() {
+						app.field(field).selectValues([{ qText: e.qText }], true, false);
+					});
+
+			});
+
+		}
+
+		function checkBadge(b) {
+			if($(b).data().count===0 || badges===false) {
+				$(b).hide()
+			}
+			else {
+				$(b).show();
+			}
+		}
+
+		return filterPanel;
 	}
 };

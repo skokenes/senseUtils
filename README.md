@@ -27,6 +27,64 @@ Function Overview
 
 destroyObj takes in a reference to an application opened with the Qlik Sense Workbench API and the qId of a transient object and removes it. This function is useful in mashups when a hypercube is no longer needed and can be removed. _qId_ can also be an array of qId's as strings; in this case, it will remove all the objects in the array from the server.
 
+**filterPanel**()
+
+filterPanel creates a custom, collapsible set of list boxes. After defining a Qlik Sense application and a parent element to append to, the filterPanel can easily add or remove filters. CSS can be used to apply custom styles to the filters. To create a new filterPanel:
+
+```
+var filterPanel = senseUtils.filterPanel(); // creates a new, empty filterPanel
+```
+
+[A live example with formatting can be demoed here.](http://sense.axisgroup.com/extensions/filterpanel/filterpanel.html)
+
+filterPanel.**app**(_[app]_)
+
+The app() method takes in a reference to an application opened with the Qlik Sense Workbench API. This application is used for all filters created in the filterPanel. If no parameter is entered, the method returns the filterPanel's application.
+
+filterPanel.**container**(_[container]_)
+
+The container() method takes in a reference to an element on the page which the filterPanel will occupy. The container should be entered as a string, like "#id". If no parameter is entered, the method returns the current container value.
+
+filterPanel.**addFields**(_array_)
+
+The addFields() method takes in an array of field names and creates the filters for them. The input can be defined in two formats:
+1) An array of strings representing the field names. ex: ["Region","Country"]
+2) An array of objects with properties "name" and "title". The name property represents the name of the field in the data model, while the title property represents a front-end title for the filterPanel UI. ex: [{ name:"Region", title:"Reg" }, { name:"Country", title:"Ctry" }]
+
+filterPanel.**removeField**(_string_)
+
+The removeField() method takes in a string representing a field name. This field will be removed from the filterPanel.
+
+filterPanel.**fields**()
+
+The fields() method returns an array of the active fields in the filterPanel. This array includes state counts and filter values.
+
+filterPanel.**badges**(_[bool]_)
+
+The badges() method takes in a boolean value that determines whether to display badges with selection counts for each field. By default, the value is true. If no parameter is entered, the method returns the current value.
+
+filterPanel.**autoCollapse**(_[bool]_)
+
+The autoCollapse() method takes in a boolean value that determines whether filters should auto-collapse when other filters are activated. The default value is true. If no parameter is entered, the method returns the current value.
+
+**filterPanel styling**
+In order for the filterPanel to properly work, the _filter-panel.css_ file in this repository should be included. This css file can be modified to customize the style of the filterPanel further. This file should be used as a starting point however as it contains CSS that controls the collapsing functionality.
+
+**filterPanel example**
+An example use of the filterPanel:
+```
+app; // assume a Qlik Sense app object exists in this variable
+
+var filterPanel = senseUtils.filterPanel()                      // creates a new filterPanel
+                            .app(app)                           // sets the 
+                            .container("#filter_container")     // sets an element with id "#filter_container" as the parent
+                            .addFields(["Region","Country"]);   // adds the fields Region and Country to the panel
+
+filterPanel.badges(false); // disables badges
+
+filterPanel.removeField("Region") // removes the Region filter from the panel
+```
+
 **multiCube**()
 
 multiCube() creates a new multiCube object. The multiCube object provides functions to link multiple hypercubes together and execute one callback once all hypercubes have updated their data. This is useful for complex visualizations that may require data from multiple cubes to render. The multiCube's setters return the multiCube, so they can be chained when configuring the cube. The multiCube methods are detailed below. To create a new multiCube:
