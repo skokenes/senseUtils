@@ -71,9 +71,11 @@ filterPanel.**autoCollapse**(_[bool]_)
 The autoCollapse() method takes in a boolean value that determines whether filters should auto-collapse when other filters are activated. The default value is true. If no parameter is entered, the method returns the current value.
 
 **filterPanel styling**
+
 In order for the filterPanel to properly work, the _filter-panel.css_ file in this repository should be included. This css file can be modified to customize the style of the filterPanel further. This file should be used as a starting point however as it contains CSS that controls the collapsing functionality.
 
 **filterPanel example**
+
 An example use of the filterPanel:
 ```
 app; // assume a Qlik Sense app object exists in this variable
