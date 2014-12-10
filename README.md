@@ -48,8 +48,11 @@ The container() method takes in a reference to an element on the page which the 
 filterPanel.**addFields**(_array_)
 
 The addFields() method takes in an array of field names and creates the filters for them. The input can be defined in two formats:
-1) An array of strings representing the field names. ex: ["Region","Country"]
-2) An array of objects with properties "name" and "title". The name property represents the name of the field in the data model, while the title property represents a front-end title for the filterPanel UI. ex: [{ name:"Region", title:"Reg" }, { name:"Country", title:"Ctry" }]
+
+1. An array of strings representing the field names.
+   ex: ["Region","Country"]
+2. An array of objects with properties "name" and "title". The name property represents the name of the field in the data model, while the title property represents a front-end title for the filterPanel UI.
+   ex: [{ name:"Region", title:"Reg" }, { name:"Country", title:"Ctry" }]
 
 filterPanel.**removeField**(_string_)
 
