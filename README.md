@@ -97,13 +97,11 @@ This is a function that accepts the set of qDataPages from the qHyperCube and re
 Example:
 
 ```
-
 var bigMatrix = []; //array object to hold the full data set
 
 //use flattenPages function to create large master qMatrix
 
 bigMatrix = senseUtils.flattenPages(_[qDataPages Object]_);  //pass in the qDataPages object
-
 
 ```
 
@@ -222,7 +220,6 @@ The callback function needs to be formatted in the following way to accept the d
 
 
 ```
-
 function callbackExample([element], [layout object], [flattened data matrix], [_this]){
 ```
 
