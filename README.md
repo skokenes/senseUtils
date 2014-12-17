@@ -102,7 +102,7 @@ var bigMatrix = []; //array object to hold the full data set
 
 //use flattenPages function to create large master qMatrix
 
-bigMatrix = senseUtils.flattenPages(layout.qHyperCube.qDataPages);  //pass in the qDataPages object
+bigMatrix = senseUtils.flattenPages(_[qDataPages Object]_);  //pass in the qDataPages object
 
 
 ```
@@ -198,13 +198,15 @@ myCube.selfDestruct();
 While explicitly designed for handling multiple cubes at once, the multiCube() function can be useful for a single cube as well. For example, it provides easily referencable methods for removing a cube or updating it's callback function after it was initially defined.
 
 **pageData**(_[this],[extension DOM element],[layout object],[callbackFunction]_)
+
 **_--Extensions-only--_**
 
-This function is meant to enable developers to retrieve larger data sets for their extension objects.  Currently the limit for extensions is 10,000 cells of data, so if your data has one dimension and one measure, you can only retrieve 5000 rows (10,000/2).  Once this limit is reached, the data needs to be paged to retrieve the full set.  This function will page the data and return (to a callback function defined by you), a flattened matrix of data from Sense.
+This function is meant to enable developers to retrieve larger data sets for their extension objects.  Currently the limit for extensions is 10,000 cells of data, so if your data has one dimension and one measure (2 columns), you can only retrieve 5000 rows (10,000/2).  Once this limit is reached, the data needs to be paged to retrieve the full set.  This function will page the data and return (to a callback function defined by you), a flattened matrix of data from Sense.
 
-Generally, the way this function works is that you pass several parameters (that are available in paint) into the function along with a callback function.  The dataPage function will page through all of the data, and when finished, it will fire off the callback function that you have defined.  Inside that callback function you can create your extension rather than within paint.  Thus, if you're wanting to convert an extension over to using getData, you'd move all of the code from within paint into a new callback function and leverage the new flattened dataset.  This callback function will need to be formatted properly to accept the data, so please see below.
+Generally, the way this function works is that you pass several parameters (that are available in paint) into the function along with a callback function that you create yourself to use the actual dataset to draw a viz or something similar.  The dataPage function will page through all of the data, and when finished, it will fire off the callback function that you have defined.  Your callback function is essentially replacing the paint function that you're probably familiar with.  Thus, if you're wanting to convert an extension over to using getData, you'd move all of the code from within paint into a new callback function and leverage the new flattened dataset.  This callback function will need to be formatted properly to accept the data, so please see below.
 
 Please see the updated [Sunburst Extension](http://branch.qlik.com/projects/showthread.php?178-Zoomable-Sunburst-with-D3&highlight=sunburst) as an example of its use.
+
 
 The parameters needed for dataPage are:
 
@@ -218,9 +220,12 @@ _callbackFunction_ : this is the name of the function that you've made which wil
 
 The callback function needs to be formatted in the following way to accept the data.  it is similar to the parameters to the standard paint function, but with the addition of the flattened data.
 
+
 ```
 
 function callbackExample([element], [layout object], [flattened data matrix], [_this]){
+```
+
 
 In the paint function for most extensions, the element and layout object are included first, so this should make it easier to convert over your extensions to use the paging.  Simply name the element and layout objects the same as you named them for the paint function.
 
@@ -233,7 +238,9 @@ var qData = layout.qHyperCube.qDataPages[0];
 var qMatrix = qData.qMatrix;
 ```
 
+
 With this new full matrix being returned, the code above can be replaced with this:
+
 
 ```
 var qMatrix = [flattened data matrix]  //whatever you've named that param in the call back
@@ -241,4 +248,3 @@ var qMatrix = [flattened data matrix]  //whatever you've named that param in the
 
 Again, please take a look at the [Sunburst Extension](http://branch.qlik.com/projects/showthread.php?178-Zoomable-Sunburst-with-D3&highlight=sunburst) to see an example.
 
-}
