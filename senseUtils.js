@@ -276,7 +276,7 @@ var senseUtils = {
         };
         return multiCube;
     },
-    pageData: function (me, $el, layout, callback) {
+    pageExtensionData: function (me, $el, layout, callback) {
         var lastrow = 0
         //get number of columns
         var colNums = layout.qHyperCube.qSize.qcx;
@@ -299,7 +299,7 @@ var senseUtils = {
             }];
             me.backendApi.getData(requestPage).then(function (dataPages) {
                 //when we get the result run the function again
-                senseUtils.pageData(me, $el, layout, callback);
+                senseUtils.pageExtensionData(me, $el, layout, callback);
             });
         } else { //if we are at the last row...
             var bigMatrix = [];
