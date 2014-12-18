@@ -289,7 +289,7 @@ var senseUtils = {
             })();
         };
         return multiCube;
-    },
+    },//function for paging data in an extension object
     pageExtensionData : function(me, $el, layout, callback) {//(this, extension DOM element, layout object from Sense, your callback)
         var lastrow = 0
         //get number of columns
