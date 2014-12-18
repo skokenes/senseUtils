@@ -195,7 +195,7 @@ myCube.selfDestruct();
 ```
 While explicitly designed for handling multiple cubes at once, the multiCube() function can be useful for a single cube as well. For example, it provides easily referencable methods for removing a cube or updating it's callback function after it was initially defined.
 
-**pageData**(_[this],[extension DOM element],[layout object],[callbackFunction]_)
+**pageExtensionData**(_[this],[extension DOM element],[layout object],[callbackFunction]_)
 
 **_--Extensions-only--_**
 
