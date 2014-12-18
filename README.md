@@ -90,7 +90,7 @@ filterPanel.badges(false); // disables badges
 filterPanel.removeField("Region") // removes the Region filter from the panel
 ```
 
-**flattenPages**([layout.qHyperCube.qDataPages])
+**flattenPages**(layout.qHyperCube.qDataPages)
 
 This is a function that accepts the set of qDataPages from the qHyperCube and returns a qMatrix containing all of the data from all of the pages.
 
@@ -195,7 +195,7 @@ myCube.selfDestruct();
 ```
 While explicitly designed for handling multiple cubes at once, the multiCube() function can be useful for a single cube as well. For example, it provides easily referencable methods for removing a cube or updating it's callback function after it was initially defined.
 
-**pageExtensionData**(_[this],[extension DOM element],[layout object],[callbackFunction]_)
+**pageExtensionData**(_this,extension DOM element,layout object,callbackFunction_)
 
 **_--Extensions-only--_**
 
@@ -220,7 +220,7 @@ The callback function needs to be formatted in the following way to accept the d
 
 
 ```
-function callbackExample([element], [layout object], [flattened data matrix], [_this]){
+function callbackExample(element, layout object, flattened data matrix, [this]){
 ```
 
 

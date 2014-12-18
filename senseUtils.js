@@ -1,27 +1,24 @@
 var senseUtils = {
-    destroyObj: function (app, qId) {
+    destroyObj : function(app, qId) {
         app.model.session.socket.send(JSON.stringify({
-            "jsonrpc": "2.0",
-            "id": 2,
-            "method": "DestroySessionObject",
-            "handle": 1,
-            "params": qId instanceof Array ? qId : [qId]
+            "jsonrpc" : "2.0",
+            "id" : 2,
+            "method" : "DestroySessionObject",
+            "handle" : 1,
+            "params" : qId instanceof Array ? qId : [qId]
         }));
     },
-    filterPanel: function () {
-        var fields = [],
-            field_list = [],
-            app, badges = true,
-            autoCollapse = true,
-            container, init = false,
-            chevron = '<svg height="6px" version="1.1" viewBox="0 0 12 7.4000001" width="9px"><g id="Page-1" transform="matrix(0,1,-1,0,12,-0.1)" style="fill:none;stroke:none"><g id="Core" transform="translate(-260,-90)" style="fill:#000000"><g id="chevron-right" transform="translate(260.5,90)"><path d="M 1,0 -0.4,1.4 4.2,6 -0.4,10.6 1,12 7,6 1,0 z" id="Shape" inkscape:connector-curvature="0"></path></g></g></g></svg>',
-            check = '<svg height="9px" version="1.1" viewBox="0 0 18 15" width="12px" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0 0 12 9"><title></title><desc></desc><defs></defs><g fill="none" fill-rule="evenodd" id="Page-1" stroke="none" stroke-width="1"><g fill="#000000" id="Core" transform="translate(-423.000000, -47.000000)"><g id="check" transform="translate(423.000000, 47.500000)"><path d="M6,10.2 L1.8,6 L0.4,7.4 L6,13 L18,1 L16.6,-0.4 L6,10.2 Z" id="Shape"></path></g></g></g></svg>';
-        function filterPanel() {}
-        filterPanel.fields = function () {
+    filterPanel : function() {
+        var fields = [], field_list = [], app, badges = true, autoCollapse = true, container, init = false, chevron = '<svg height="6px" version="1.1" viewBox="0 0 12 7.4000001" width="9px"><g id="Page-1" transform="matrix(0,1,-1,0,12,-0.1)" style="fill:none;stroke:none"><g id="Core" transform="translate(-260,-90)" style="fill:#000000"><g id="chevron-right" transform="translate(260.5,90)"><path d="M 1,0 -0.4,1.4 4.2,6 -0.4,10.6 1,12 7,6 1,0 z" id="Shape" inkscape:connector-curvature="0"></path></g></g></g></svg>', check = '<svg height="9px" version="1.1" viewBox="0 0 18 15" width="12px" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0 0 12 9"><title></title><desc></desc><defs></defs><g fill="none" fill-rule="evenodd" id="Page-1" stroke="none" stroke-width="1"><g fill="#000000" id="Core" transform="translate(-423.000000, -47.000000)"><g id="check" transform="translate(423.000000, 47.500000)"><path d="M6,10.2 L1.8,6 L0.4,7.4 L6,13 L18,1 L16.6,-0.4 L6,10.2 Z" id="Shape"></path></g></g></g></svg>';
+        function filterPanel() {
+        }
+
+
+        filterPanel.fields = function() {
             return fields;
         }
-        filterPanel.addFields = function (_) {
-            _.forEach(function (d) {
+        filterPanel.addFields = function(_) {
+            _.forEach(function(d) {
                 if (d.hasOwnProperty("title") && field_list.indexOf(d.name) === -1) {
                     fields.push(new field(d.name, d.title))
                     field_list.push(d.name);
@@ -33,43 +30,48 @@ var senseUtils = {
             build();
             return filterPanel;
         }
-        filterPanel.app = function (_) {
-            if (!arguments.length) return app;
+        filterPanel.app = function(_) {
+            if (!arguments.length)
+                return app;
             app = _;
             return filterPanel;
         }
-        filterPanel.badges = function (_) {
-            if (!arguments.length) return badges;
+        filterPanel.badges = function(_) {
+            if (!arguments.length)
+                return badges;
             badges = _;
-            $(".filter-badge").each(function (i, d) {
+            $(".filter-badge").each(function(i, d) {
                 checkBadge(d);
             });
             return filterPanel;
         }
-        filterPanel.autoCollapse = function (_) {
-            if (!arguments.length) return autoCollapse;
+        filterPanel.autoCollapse = function(_) {
+            if (!arguments.length)
+                return autoCollapse;
             autoCollapse = _;
             return filterPanel;
         }
-        filterPanel.container = function (_) {
-            if (!arguments.length) return container;
+        filterPanel.container = function(_) {
+            if (!arguments.length)
+                return container;
             container = _;
             return filterPanel;
         }
-        filterPanel.removeField = function (_) {
-            if (!arguments.length) return filterPanel;
+        filterPanel.removeField = function(_) {
+            if (!arguments.length)
+                return filterPanel;
             var field = fields.filter(function (d) {
-                return d.field === _
+            return d.field === _
             })[0];
             console.log(field);
             senseUtils.destroyObj(app, field.qId);
-            fields = fields.filter(function (d) {
+            fields = fields.filter(function(d) {
                 return d.field != _
             });
-            field_list = field_list.filter(function (d) {
+            field_list = field_list.filter(function(d) {
                 return d != _
             });
-            $(".filter").filter(function (d) {
+            $(".filter").filter(function(d) {
                 return $(this).data().field === _
             }).empty();
         }
@@ -83,11 +85,12 @@ var senseUtils = {
             this.possible = null;
             this.qId = null;
         }
+
         function build() {
-            var filter_build = fields.filter(function (d) {
+            var filter_build = fields.filter(function(d) {
                 return d.init === false;
             });
-            filter_build.forEach(function (d) {
+            filter_build.forEach(function(d) {
                 d.init = true;
                 // build the filter
                 var filter = document.createElement("div");
@@ -106,29 +109,30 @@ var senseUtils = {
                 var content = document.createElement("div");
                 $(content).addClass("filter-content").addClass("inactive").appendTo($(filter));
                 // click event to toggle show
-                $(header).on("click", function () {
+                $(header).on("click", function() {
                     if ($(content).hasClass("active")) {
                         $(content).removeClass("active");
                         $(content).addClass("inactive");
                     } else {
-                        if (autoCollapse === true) $(container).find(".active").removeClass("active").addClass("inactive");
+                        if (autoCollapse === true)
+                            $(container).find(".active").removeClass("active").addClass("inactive");
                         $(content).removeClass("inactive").addClass("active");
                     }
                 });
                 // create hypercube
                 var field = d.field;
                 app.createList({
-                    "qDef": {
-                        "qFieldDefs": [field]
+                    "qDef" : {
+                        "qFieldDefs" : [field]
                     },
-                    "qInitialDataFetch": [{
-                        qTop: 0,
-                        qLeft: 0,
-                        qHeight: 10000,
-                        qWidth: 1
+                    "qInitialDataFetch" : [{
+                        qTop : 0,
+                        qLeft : 0,
+                        qHeight : 10000,
+                        qWidth : 1
                     }]
-                }, function (reply) {
-                    var values = reply.qListObject.qDataPages[0].qMatrix.map(function (e) {
+                }, function(reply) {
+                    var values = reply.qListObject.qDataPages[0].qMatrix.map(function(e) {
                         return e[0];
                     });
                     d.values = values;
@@ -140,14 +144,15 @@ var senseUtils = {
                 });
             });
         }
+
         function update(cf) {
             // the classes
             var classes = {
-                "S": "selected",
-                "O": "possible",
-                "X": "excluded"
+                "S" : "selected",
+                "O" : "possible",
+                "X" : "excluded"
             };
-            var filter = $(container).find(".filter").filter(function (d) {
+            var filter = $(container).find(".filter").filter(function(d) {
                 return $(this).data().field === cf.field
             });
             // current field
@@ -156,7 +161,7 @@ var senseUtils = {
             var badge = $(".filter-badge", $(filter));
             var badge_data = cf.selected;
             $(badge).html(badge_data).data({
-                "count": badge_data
+                "count" : badge_data
             });
             checkBadge(badge);
             // get content
@@ -166,18 +171,19 @@ var senseUtils = {
             // empty content
             $(content).empty();
             // rebuild content
-            content_data.forEach(function (e, k) {
+            content_data.forEach(function(e, k) {
                 var list_item = document.createElement("div");
                 // create the check
                 var check_d = document.createElement("div");
                 $(check_d).addClass("check").html(check).appendTo($(list_item));
-                $(list_item).addClass("filter-item").addClass(classes[e.qState]).append(e.qText).appendTo($(content)).click(function () {
+                $(list_item).addClass("filter-item").addClass(classes[e.qState]).append(e.qText).appendTo($(content)).click(function() {
                     app.field(field).selectValues([{
-                        qText: e.qText
+                        qText : e.qText
                     }], true, false);
                 });
             });
         }
+
         function checkBadge(b) {
             if ($(b).data().count === 0 || badges === false) {
                 $(b).hide()
@@ -185,49 +191,53 @@ var senseUtils = {
                 $(b).show();
             }
         }
+
         return filterPanel;
     },
-    flattenPages: function (data) { // function to flatten out the paginated qHyperCube data into one large qMatrix
+    flattenPages : function(data) {// function to flatten out the paginated qHyperCube data into one large qMatrix
         var flat = [];
-        $.each(data, function () {
+        $.each(data, function() {
             flat.extend(this.qMatrix);
         });
         return flat;
     },
-    multiCube: function () {
-        var app, cubes = [],
-            callback = function () {},
-            queue;
-        function multiCube() {}
-        var queue = function () {
+    multiCube : function() {
+        var app, cubes = [], callback = function() {
+        }, queue;
+        function multiCube() {
+        }
+
+        var queue = function() {
             var cube_status = 0;
-            cubes.forEach(function (d) {
+            cubes.forEach(function(d) {
                 cube_status = cube_status + d.status;
             });
             if (cube_status === cubes.length) {
                 callback();
-                cubes.forEach(function (d) {
+                cubes.forEach(function(d) {
                     d.status = 0;
                 });
             }
         }
-        multiCube.app = function (_) {
-            if (!arguments.length) return app;
+        multiCube.app = function(_) {
+            if (!arguments.length)
+                return app;
             app = _;
             return multiCube;
         };
-        multiCube.addCube = function (_) {
-            if (!arguments.length) return null;
+        multiCube.addCube = function(_) {
+            if (!arguments.length)
+                return null;
             var id = guid();
             cubes.push({
-                id: id,
-                def: _,
-                status: 0,
-                data: null,
-                qId: null
+                id : id,
+                def : _,
+                status : 0,
+                data : null,
+                qId : null
             });
             var currCube = getCubeObj(id);
-            app.createCube(_, function (reply) {
+            app.createCube(_, function(reply) {
                 currCube.status = 1;
                 currCube.data = reply;
                 currCube.qId = reply.qInfo.qId;
@@ -235,28 +245,31 @@ var senseUtils = {
             });
             return multiCube;
         }
-        multiCube.removeCube = function (_) {
-            if (!arguments.length) return null;
+        multiCube.removeCube = function(_) {
+            if (!arguments.length)
+                return null;
             senseUtils.destroyObj(app, getCubeObj(_).qId);
-            cubes = cubes.filter(function (d) {
+            cubes = cubes.filter(function(d) {
                 return d.id != _
             });
         }
-        multiCube.callback = function (_) {
-            if (!arguments.length) return callback;
+        multiCube.callback = function(_) {
+            if (!arguments.length)
+                return callback;
             callback = _;
             return multiCube;
         }
-        multiCube.cubes = function () {
+        multiCube.cubes = function() {
             return cubes;
         }
-        multiCube.selfDestruct = function () {
-            cubes.forEach(function (d) {
+        multiCube.selfDestruct = function() {
+            cubes.forEach(function(d) {
                 senseUtils.destroyObj(app, d.qId);
             });
-            app = null, cubes = [], callback = function () {}, queue = null;
+            app = null, cubes = [], callback = function() {
+            }, queue = null;
         }
-        var getCubeObj = function (guid) {
+        var getCubeObj = function(guid) {
             var cubeObj;
             for (var i = 0; i < cubes.length; i++) {
                 if (cubes[i].id === guid) {
@@ -270,13 +283,14 @@ var senseUtils = {
             function s4() {
                 return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
             }
-            return (function () {
+
+            return (function() {
                 return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
             })();
         };
         return multiCube;
     },
-    pageExtensionData: function (me, $el, layout, callback) {
+    pageExtensionData : function(me, $el, layout, callback) {//(this, extension DOM element, layout object from Sense, your callback)
         var lastrow = 0
         //get number of columns
         var colNums = layout.qHyperCube.qSize.qcx;
@@ -284,35 +298,36 @@ var senseUtils = {
         //needs to be 10,000 divided by number of columns
         var calcHeight = Math.floor(10000 / colNums);
         //loop through the rows we have and render
-        me.backendApi.eachDataRow(function (rownum, row) {
+        me.backendApi.eachDataRow(function(rownum, row) {
             //simply by looping through each page, the qHyperCube is updated and will not have more than one page
             lastrow = rownum;
         });
-        if (me.backendApi.getRowCount() > lastrow + 1) { //if we're not at the last row...
+        if (me.backendApi.getRowCount() > lastrow + 1) {//if we're not at the last row...
             //we havent got all the rows yet, so get some more.  we first create a new page request
             var requestPage = [{
-                qTop: lastrow + 1,
-                qLeft: 0,
-                qWidth: colNums,
+                qTop : lastrow + 1,
+                qLeft : 0,
+                qWidth : colNums,
                 //should be # of columns
-                qHeight: Math.min(calcHeight, me.backendApi.getRowCount() - lastrow)
+                qHeight : Math.min(calcHeight, me.backendApi.getRowCount() - lastrow)
             }];
-            me.backendApi.getData(requestPage).then(function (dataPages) {
+            me.backendApi.getData(requestPage).then(function(dataPages) {
                 //when we get the result run the function again
                 senseUtils.pageExtensionData(me, $el, layout, callback);
             });
-        } else { //if we are at the last row...
+        } else {//if we are at the last row...
             var bigMatrix = [];
             //use flattenPages function to create large master qMatrix
             bigMatrix = senseUtils.flattenPages(layout.qHyperCube.qDataPages);
             //fire off the callback function
             callback($el, layout, bigMatrix, me);
+            //(DOM element, layout object, new flattened matrix, this)
         }
     }
 };
 //function to append arrays to other arrays
-Array.prototype.extend = function (arr) {
-    arr.forEach(function (v) {
+Array.prototype.extend = function(arr) {
+    arr.forEach(function(v) {
         this.push(v)
     }, this);
 }
