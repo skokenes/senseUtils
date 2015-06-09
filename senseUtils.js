@@ -177,9 +177,7 @@ var senseUtils = {
                 var check_d = document.createElement("div");
                 $(check_d).addClass("check").html(check).appendTo($(list_item));
                 $(list_item).addClass("filter-item").addClass(classes[e.qState]).append(e.qText).appendTo($(content)).click(function() {
-                    app.field(field).selectValues([{
-                        qText : e.qText
-                    }], true, false);
+                    app.field(field).select([e.qElemNumber],true,true);
                 });
             });
         }
