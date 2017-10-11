@@ -369,10 +369,10 @@ var senseUtils = {
             };
 
             for (var i = 0; i<dim_count; i++) {
-                d[i].qSelf = self;
+                //d[i].qSelf = self;
                 d[i].qIndex = i;
                 d[i].qSelect = function() {
-                    this.qSelf.backendApi.selectValues(this.qIndex,[this.qElemNumber],true);    
+                    self.backendApi.selectValues(this.qIndex,[this.qElemNumber],true);    
                 };
                         
             };
